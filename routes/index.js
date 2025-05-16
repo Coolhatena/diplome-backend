@@ -1,5 +1,6 @@
 import { Verify, VerifyRole } from '../middleware/verify.js';
 import Auth from './auth.js';
+import Video from './video.js';
 
 const Router = (server) => {
 	// Home route with GET method and a handler
@@ -37,5 +38,7 @@ const Router = (server) => {
 
 	// Auth route
 	server.use('/diplome/auth', Auth);
+
+	server.use('/diplome/courses', Video);
 };
 export default Router;
