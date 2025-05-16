@@ -1,9 +1,9 @@
-const fs = require('fs');
-const path = require('path');
+import { statSync } from 'fs';
+import path from 'path';
 
 export const SendVideo = async (req, res) => {
 	const videoPath = path.join(__dirname, '../videos', req.params.filename);
-	const stat = fs.statSync(videoPath);
+	const stat = statSync(videoPath);
 	const fileSize = stat.size;
 	const range = req.headers.range;
   
