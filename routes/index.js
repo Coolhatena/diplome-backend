@@ -39,6 +39,7 @@ const Router = (server) => {
 	// Auth route
 	server.use('/diplome/auth', Auth);
 
+	// Video streaming route
 	server.use('/diplome/courses', Video);
 };
 export default Router;
