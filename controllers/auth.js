@@ -1,6 +1,8 @@
 import User from '../models/User.js';
 import Blacklist from '../models/Blacklist.js';
 import bycrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
 
 
 
@@ -145,11 +147,11 @@ export async function Logout(req, res) {
 }
 
 /**
- * @route GET /diplome/auth/forgot-password
+ * @route POST /diplome/auth/forgot-password
  * @desc Logs out a user
  * @access Public
  */
-export async function passwordRecovery(req, res) {
+export async function forgotPassword(req, res) {
   const { email } = req.body;
   const user = await User.findOne({ email });
   if (!user) return res.status(404).json({ message: "Usuario no encontrado" });
@@ -161,7 +163,13 @@ export async function passwordRecovery(req, res) {
   const resetLink = `http://localhost/diplome/auth/forgot-password/${token}`;
 
   const transporter = nodemailer.createTransport({
-    service: "gmail", // If this doesnt work, use smtp
+    service: "Outlook365",
+	host: "smtp.office365.com",
+	port: "587",
+	tls: {
+		ciphers: "SSLv3",
+		rejectUnauthorized: false,
+	},
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS,
