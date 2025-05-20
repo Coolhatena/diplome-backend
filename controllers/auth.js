@@ -163,17 +163,11 @@ export async function forgotPassword(req, res) {
   const resetLink = `http://localhost/diplome/auth/forgot-password/${token}`;
 
   const transporter = nodemailer.createTransport({
-    service: "Outlook365",
-	host: "smtp.office365.com",
-	port: "587",
-	tls: {
-		ciphers: "SSLv3",
-		rejectUnauthorized: false,
+	service: "gmail",
+	auth: {
+		user: process.env.EMAIL_USER,
+		pass: process.env.EMAIL_PASS,
 	},
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
   });
 
   await transporter.sendMail({
