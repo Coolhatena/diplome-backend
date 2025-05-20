@@ -148,7 +148,7 @@ export async function Logout(req, res) {
 
 /**
  * @route POST /diplome/auth/forgot-password
- * @desc Logs out a user
+ * @desc Send password recovery email
  * @access Public
  */
 export async function forgotPassword(req, res) {
