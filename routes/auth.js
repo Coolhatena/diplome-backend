@@ -1,5 +1,5 @@
 import express from 'express';
-import { Register, Login, Logout } from '../controllers/auth.js';
+import { Register, Login, Logout, forgotPassword } from '../controllers/auth.js';
 import Validate from '../middleware/validate.js';
 import { check } from 'express-validator';
 
@@ -28,6 +28,9 @@ router.post(
 		.notEmpty()
 		.isLength({ min: 1 })
 		.withMessage('Your password must be at least 8 characters long'),
+	check('phone')
+		.notEmpty()
+		.withMessage('Your phone number is required'),
 	Validate,
 	Register	
 );
@@ -48,6 +51,6 @@ router.post(
 router.get('/logout', Logout);
 
 // Forgot password Route - POST
-router.post("/auth/forgot-password", );
+router.post("/forgot-password", forgotPassword);
 
 export default router;
