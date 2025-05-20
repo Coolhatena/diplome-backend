@@ -143,3 +143,38 @@ export async function Logout(req, res) {
 	}
 	res.end();
 }
+
+/**
+ * @route GET /diplome/auth/forgot-password
+ * @desc Logs out a user
+ * @access Public
+ */
+export async function passwordRecovery(req, res) {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+  if (!user) return res.status(404).json({ message: "Usuario no encontrado" });
+
+  const token = jwt.sign({ userId: user._id }, process.env.SECRET_ACCESS_TOKEN, {
+    expiresIn: "15m",
+  });
+
+  const resetLink = `http://localhost/diplome/auth/forgot-password/${token}`;
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail", // If this doesnt work, use smtp
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  await transporter.sendMail({
+    from: `"Soporte" <${process.env.EMAIL_USER}>`,
+    to: email,
+    subject: "Recupera tu contraseña",
+    html: `<p>Haz clic en el siguiente enlace para cambiar tu contraseña:</p>
+           <a href="${resetLink}">${resetLink}</a>`,
+  });
+
+  res.json({ message: "Correo enviado" });
+}
