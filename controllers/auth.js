@@ -1,6 +1,6 @@
 import User from '../models/User.js';
 import Blacklist from '../models/Blacklist.js';
-import bycrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
 
@@ -68,7 +68,7 @@ export async function Login(req, res) {
 		}
 
 		// Check if password is correct
-		const isPasswordValid = await bycrypt.compare(`${req.body.password}`, user.password);
+		const isPasswordValid = await bcrypt.compare(`${req.body.password}`, user.password);
 		if (!isPasswordValid) {
 			return res.status(401).json({
 				status: "failed",
@@ -160,7 +160,7 @@ export async function forgotPassword(req, res) {
     expiresIn: "15m",
   });
 
-  const resetLink = `http://localhost/diplome/auth/forgot-password/${token}`;
+  const resetLink = `http://localhost/diplome/auth/reset-password/${token}`;
 
   const transporter = nodemailer.createTransport({
 	service: "gmail",
@@ -191,7 +191,7 @@ export async function resetPassword(req, res) {
   const { password } = req.body;
 
   try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    const payload = jwt.verify(token, process.env.SECRET_ACCESS_TOKEN);
     const user = await User.findById(payload.userId);
     if (!user) return res.status(404).json({ message: "Usuario no encontrado" });
 
@@ -201,6 +201,6 @@ export async function resetPassword(req, res) {
 
     res.json({ message: "Contraseña actualizada correctamente" });
   } catch (err) {
-    return res.status(400).json({ message: "Token inválido o expirado" });
+    return res.status(400).json({ message: "Token inválido o expirado", err });
   }
 }
