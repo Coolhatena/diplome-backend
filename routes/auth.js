@@ -47,4 +47,7 @@ router.post(
 // Logout Route - GET
 router.get('/logout', Logout);
 
+// Forgot password Route - POST
+router.post("/auth/forgot-password", );
+
 export default router;
