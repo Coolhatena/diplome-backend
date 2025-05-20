@@ -54,6 +54,6 @@ router.get('/logout', Logout);
 router.post("/forgot-password", forgotPassword);
 
 // Set new password - POST
-router.post("/auth/reset-password/:token", resetPassword);
+router.post("/reset-password/:token", resetPassword);
 
 export default router;
