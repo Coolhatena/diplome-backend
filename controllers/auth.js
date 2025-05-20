@@ -180,3 +180,27 @@ export async function forgotPassword(req, res) {
 
   res.json({ message: "Correo enviado" });
 }
+
+/**
+ * @route POST /diplome/auth/reset-password/:token
+ * @desc Allows the user to change password
+ * @access Public
+ */
+export async function resetPassword(req, res) {
+  const { token } = req.params;
+  const { password } = req.body;
+
+  try {
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    const user = await User.findById(payload.userId);
+    if (!user) return res.status(404).json({ message: "Usuario no encontrado" });
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+    user.password = hashedPassword;
+    await user.save();
+
+    res.json({ message: "Contraseña actualizada correctamente" });
+  } catch (err) {
+    return res.status(400).json({ message: "Token inválido o expirado" });
+  }
+}
