@@ -1,5 +1,5 @@
 import express from 'express';
-import { Register, Login, Logout, forgotPassword } from '../controllers/auth.js';
+import { Register, Login, Logout, forgotPassword, resetPassword } from '../controllers/auth.js';
 import Validate from '../middleware/validate.js';
 import { check } from 'express-validator';
 
@@ -52,5 +52,8 @@ router.get('/logout', Logout);
 
 // Forgot password Route - POST
 router.post("/forgot-password", forgotPassword);
+
+// Set new password - POST
+router.post("/auth/reset-password/:token", resetPassword);
 
 export default router;
