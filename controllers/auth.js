@@ -190,13 +190,16 @@ export async function resetPassword(req, res) {
   const { token } = req.params;
   const { password } = req.body;
 
+  console.log(token)
+  console.log(password)
   try {
     const payload = jwt.verify(token, process.env.SECRET_ACCESS_TOKEN);
+	console.log("Payload: ")
+	console.log(payload);
     const user = await User.findById(payload.userId);
     if (!user) return res.status(404).json({ message: "Usuario no encontrado" });
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    user.password = hashedPassword;
+    user.password = password;
     await user.save();
 
     res.json({ message: "Contraseña actualizada correctamente" });
