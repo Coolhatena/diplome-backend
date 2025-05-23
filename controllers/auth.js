@@ -153,14 +153,17 @@ export async function Logout(req, res) {
  */
 export async function forgotPassword(req, res) {
   const { email } = req.body;
+  console.log("Received email:")
+  console.log(email);
   const user = await User.findOne({ email });
-  if (!user) return res.status(404).json({ message: "Usuario no encontrado" });
+  if (!user) return res.status(404).json({ status: "error", message: "Usuario no encontrado" });
 
   const token = jwt.sign({ userId: user._id }, process.env.SECRET_ACCESS_TOKEN, {
     expiresIn: "15m",
   });
 
-  const resetLink = `http://localhost/diplome/auth/reset-password/${token}`;
+//   const resetLink = `http://localhost/diplome/auth/reset-password/${token}`;
+  const resetLink = `http://localhost:3000/recover/changepassword?token=${token}`;
 
   const transporter = nodemailer.createTransport({
 	service: "gmail",
@@ -178,7 +181,7 @@ export async function forgotPassword(req, res) {
            <a href="${resetLink}">${resetLink}</a>`,
   });
 
-  res.json({ message: "Correo enviado" });
+  res.json({ status: "success", message: "Correo enviado" });
 }
 
 /**
@@ -197,13 +200,13 @@ export async function resetPassword(req, res) {
 	console.log("Payload: ")
 	console.log(payload);
     const user = await User.findById(payload.userId);
-    if (!user) return res.status(404).json({ message: "Usuario no encontrado" });
+    if (!user) return res.status(404).json({ status: "error", message: "Usuario no encontrado" });
 
     user.password = password;
     await user.save();
 
-    res.json({ message: "Contraseña actualizada correctamente" });
+    res.json({ status: "success", message: "Contraseña actualizada correctamente" });
   } catch (err) {
-    return res.status(400).json({ message: "Token inválido o expirado", err });
+    return res.status(400).json({ status: "error", message: "Token inválido o expirado", err });
   }
 }
