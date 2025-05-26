@@ -1,6 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import Video from '../models/Video';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -35,3 +36,17 @@ export const SendVideo = async (req, res) => {
 	  fs.createReadStream(videoPath).pipe(res);
 	}
   };
+
+export const UploadVideo = async (req, res) => {
+  try {
+    const { title } = req.body;
+    const filename = req.file.filename;
+
+    const video = new Video({ title, filename });
+    await video.save();
+
+    res.status(201).json({ message: 'Video uploaded successfully', video });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to upload video' });
+  }
+};
