@@ -19,6 +19,6 @@ const upload = multer({ storage });
 
 router.get('/video/:filename', SendVideo);
 
-router.post('/video/', upload.single('video'), UploadVideo);
+router.post('/video', upload.single('video'), UploadVideo);
 
 export default router;
