@@ -1,5 +1,6 @@
 import express from 'express';
-import { SendVideo } from '../controllers/video.js'; 
+import multer from 'multer';
+import { SendVideo, UploadVideo } from '../controllers/video.js'; 
 import Validate from '../middleware/validate.js';
 
 const router = express.Router();
