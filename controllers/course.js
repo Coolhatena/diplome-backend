@@ -12,3 +12,12 @@ export const UploadCourse = async (req, res) => {
     res.status(500).json({ error: 'Failed to upload course', message: error.message });
   }
 };
+
+export const GetAllCourses = async (req, res) => {
+  try {
+    const courses = await Course.find();
+    res.status(200).json(courses);
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to fetch courses', message: error.message });
+  }
+};
