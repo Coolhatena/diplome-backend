@@ -11,6 +11,19 @@ const courseSchema = new mongoose.Schema({
 		type: String, 
 		required: true 
 	},
+	imageUrl: 
+	{
+		type: String, 
+		required: true 
+	},
+	lessons: {
+		type: [mongoose.Schema.Types.Mixed],
+	},
+	userId:
+	{
+		type: String, 
+		required: true 
+	},
 	uploadedAt: 
 	{ 
 		type: Date, 
