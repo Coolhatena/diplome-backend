@@ -1,6 +1,7 @@
 import { Verify, VerifyRole } from '../middleware/verify.js';
 import Auth from './auth.js';
 import Video from './video.js';
+import Course from './course.js';
 
 const Router = (server) => {
 	// Home route with GET method and a handler
@@ -41,5 +42,7 @@ const Router = (server) => {
 
 	// Video streaming route
 	server.use('/diplome/courses', Video);
+
+	server.use('/diplome', Course)
 };
 export default Router;
