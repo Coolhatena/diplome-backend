@@ -39,10 +39,10 @@ export const SendVideo = async (req, res) => {
 
 export const UploadVideo = async (req, res) => {
   try {
-    const { title } = req.body;
+    const { title, userId } = req.body;
     const filename = req.file.filename;
 
-    const video = new Video({ title, filename });
+    const video = new Video({ title, userId, filename });
     await video.save();
 
     res.status(201).json({ message: 'Video uploaded successfully', video });
