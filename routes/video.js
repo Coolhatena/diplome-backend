@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import { GetAllVideos, SendVideo, UploadVideo } from '../controllers/video.js'; 
+import { DeleteVideo, EditVideo, GetAllVideos, SendVideo, UploadVideo } from '../controllers/video.js'; 
 import Validate from '../middleware/validate.js';
 
 const router = express.Router();
@@ -21,6 +21,10 @@ router.get('/video', GetAllVideos);
 
 router.get('/video/:filename', SendVideo);
 
+router.put('/video/:id', upload.none(), EditVideo);
+
 router.post('/video', upload.single('video'), UploadVideo);
+
+router.delete('/video/:id', DeleteVideo)
 
 export default router;

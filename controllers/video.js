@@ -52,6 +52,52 @@ export const UploadVideo = async (req, res) => {
   }
 };
 
+export const EditVideo = async (req, res) => {
+  try {
+    const { title } = req.body;
+    const { id } = req.params;
+
+    const video = await Video.findById(id);
+    if (!video) {
+      return res.status(404).json({ message: 'Lección no encontrada' });
+    }
+
+    video.title = title ? title : video.title;
+    await video.save();
+
+    res.status(200).json({ message: 'Lección actualizada correctamente', video });
+  } catch (error) {
+    res.status(500).json({ message: 'Error al actualizar la lección' });
+  }
+}
+
+export const DeleteVideo = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const video = await Video.findById(id);
+    if (!video) {
+      return res.status(404).json({ error: 'Video not found' });
+    }
+
+    const videoPath = path.join('videos', video.filename);
+
+    fs.unlink(videoPath, async (err) => {
+      if (err && err.code !== 'ENOENT') {
+        console.error('Error deleting file:', err);
+        return res.status(500).json({ error: 'Unable to delete file' });
+      }
+
+      await Video.findByIdAndDelete(id);
+
+      res.json({ message: 'Video eliminado correctamente' });
+    });
+  } catch (error) {
+    console.error('Error deleting video:', error);
+    res.status(500).json({ error: 'Server Error' });
+  }
+}
+
 export const GetAllVideos = async (req, res) => {
   try {
 	const videos = await Video.find();
