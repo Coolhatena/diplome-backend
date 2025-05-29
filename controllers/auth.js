@@ -78,7 +78,7 @@ export async function Login(req, res) {
 		}
 
 		let options = {
-			maxAge: 20 * 60 * 1000, // Expires in 20 minutes
+			maxAge: 480 * 60 * 1000, // Expires in 20 minutes
 			httpOnly: true, // The cookie cant be accessed using `document.cookie`
 			secure: false, // true: The token can only be sent in https conections
 			sameSite: "Lax",
