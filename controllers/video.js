@@ -39,14 +39,24 @@ export const SendVideo = async (req, res) => {
 
 export const UploadVideo = async (req, res) => {
   try {
-    const { title, userId } = req.body;
+    const { title, courseId } = req.body;
     const filename = req.file.filename;
 
-    const video = new Video({ title, userId, filename });
+    const video = new Video({ title, userId: courseId, filename });
     await video.save();
 
+	
     res.status(201).json({ message: 'Video uploaded successfully', video });
   } catch (error) {
     res.status(500).json({ error: 'Failed to upload video' });
+  }
+};
+
+export const GetAllVideos = async (req, res) => {
+  try {
+	const videos = await Video.find();
+	res.status(200).json(videos);
+  } catch (error) {
+	res.status(500).json({ error: 'Failed to fetch courses', message: error.message });
   }
 };
