@@ -9,21 +9,28 @@ export async function Verify(req, res, next) {
 		const authHeader = req.headers["cookie"];
 		if (!authHeader) return res.sendStatus(401);
 
-		const cookie = authHeader.split('=')[1];
-		const accessToken = cookie.split(";")[0];
+		console.log("Authheader:")
+		console.log(authHeader);
+		const cookie = authHeader.split(';')[1];
+		const accessToken = cookie.split("=")[1];
 		const isBlacklisted = await Blacklist.findOne({ token: accessToken });
 
 		// If token is blacklisted, ask for re-auth
 		if (isBlacklisted) {
+			console.log("Token blacklisted")
 			return res.status(401).json({
 				message: "This session has expired, please login"
 			})
 		}
 
 		// Verify jwt for tampering or expiration
-		jwt.verify(cookie, SECRET_ACCESS_TOKEN, async (err, decoded) => {
+		console.log("access token: ")
+		console.log(accessToken)
+		jwt.verify(accessToken, SECRET_ACCESS_TOKEN, async (err, decoded) => {
 			// Return status 401 if theres a problem with the token
 			if (err) {
+				console.log("This session has expired")
+				console.log(err)
 				return res.status(401).json({ message: "This session has expired. Please login" });
 			}
 
@@ -31,9 +38,12 @@ export async function Verify(req, res, next) {
 			const user = await User.findById(id);
 			const { password, ...data} = user._doc; // Get the user object without the password
 			req.user = data;
+			console.log("User validated")
 			next();
 		})
 	} catch (err) {
+		console.log("An error ocurred while validating token")
+		console.log(err.message)
 		res.status(401).json({
 			status: "error",
 			code: 500,

@@ -22,6 +22,7 @@ const Router = (server) => {
 
 	// Normal user route
 	server.get('/diplome/user', Verify, (req, res) => {
+		console.log("User refreshed")
 		res.status(200).json({
 			status: "success",
 			message: "Welcome, User",
