@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import { SendVideo, UploadVideo } from '../controllers/video.js'; 
+import { GetAllVideos, SendVideo, UploadVideo } from '../controllers/video.js'; 
 import Validate from '../middleware/validate.js';
 
 const router = express.Router();
@@ -16,6 +16,8 @@ const storage = multer.diskStorage({
 });
 
 const upload = multer({ storage });
+
+router.get('/video', GetAllVideos);
 
 router.get('/video/:filename', SendVideo);
 
