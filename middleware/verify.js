@@ -11,8 +11,14 @@ export async function Verify(req, res, next) {
 
 		console.log("Authheader:")
 		console.log(authHeader);
-		const cookie = authHeader.split(';')[1];
-		const accessToken = cookie.split("=")[1];
+		let cookie = ''
+		let accessToken = ''
+		if (authHeader.includes("__next_hmr_refresh_hash__")) {
+			cookie = authHeader.split(';')[1];
+			accessToken = cookie.split("=")[1];
+		} else {
+			accessToken = authHeader.split('=')[1];
+		}
 		const isBlacklisted = await Blacklist.findOne({ token: accessToken });
 
 		// If token is blacklisted, ask for re-auth
