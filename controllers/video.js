@@ -42,7 +42,7 @@ export const UploadVideo = async (req, res) => {
     const { title, courseId } = req.body;
     const filename = req.file.filename;
 
-    const video = new Video({ title, userId: courseId, filename });
+    const video = new Video({ title, courseId, filename });
     await video.save();
 
 	
