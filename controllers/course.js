@@ -1,4 +1,5 @@
 import Course from '../models/Course.js';
+import User from '../models/User.js';
 
 export const UploadCourse = async (req, res) => {
   try {
@@ -35,10 +36,21 @@ export const UpdateCourse = async (req, res) => {
 };
 
 export const GetAllCourses = async (req, res) => {
-  try {
+	try {
     const courses = await Course.find();
     res.status(200).json(courses);
   } catch (error) {
-    res.status(500).json({ error: 'Failed to fetch courses', message: error.message });
+	  res.status(500).json({ error: 'Failed to fetch courses', message: error.message });
+	}
+};
+
+export const GetTeacher = async (req, res) => {
+  try {
+	const { id } = req.params;
+
+	const teacher = await User.findById(id);
+	res.status(200).json(teacher);
+  } catch (error) {
+	res.status(500).json({ error: 'Failed to fetch teacher', message: error.message });
   }
 };
